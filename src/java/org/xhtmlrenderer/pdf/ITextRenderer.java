@@ -100,16 +100,20 @@ public class ITextRenderer {
     private PDFCreationListener _listener;
 
     public ITextRenderer() {
-        this(DEFAULT_DOTS_PER_POINT, DEFAULT_DOTS_PER_PIXEL);
+        this( PageBox.DEFAULT_PAGE_HEIGHT );
     }
 
-    public ITextRenderer(float dotsPerPoint, int dotsPerPixel) {
+    public ITextRenderer( final int pageHeight ) {
+        this(DEFAULT_DOTS_PER_POINT, DEFAULT_DOTS_PER_PIXEL, pageHeight);
+    }
+
+    public ITextRenderer(float dotsPerPoint, int dotsPerPixel, final int pageHeight) {
         _dotsPerPoint = dotsPerPoint;
 
         _outputDevice = new ITextOutputDevice(_dotsPerPoint);
 
         ITextUserAgent userAgent = new ITextUserAgent(_outputDevice);
-        _sharedContext = new SharedContext();
+        _sharedContext = new SharedContext( pageHeight );
         _sharedContext.setUserAgentCallback(userAgent);
         _sharedContext.setCss(new StyleReference(userAgent));
         userAgent.setSharedContext(_sharedContext);

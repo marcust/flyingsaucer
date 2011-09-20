@@ -29,4 +29,7 @@ public interface CssContext {
     StyleReference getCss();
     
     FSFontMetrics getFSFontMetrics(FSFont font);
+
+    public int getPageHeight();
+
 }

@@ -36,6 +36,7 @@ import org.xhtmlrenderer.layout.SharedContext;
 import org.xhtmlrenderer.render.BlockBox;
 import org.xhtmlrenderer.render.Box;
 import org.xhtmlrenderer.render.RenderingContext;
+import org.xhtmlrenderer.render.PageBox;
 import org.xhtmlrenderer.render.ViewportBox;
 import org.xhtmlrenderer.simple.extend.XhtmlNamespaceHandler;
 import org.xhtmlrenderer.util.Configuration;
@@ -382,7 +383,7 @@ public class Java2DRenderer {
 		outputDevice = new Java2DOutputDevice(outputImage);
 
 		UserAgentCallback userAgent = new NaiveUserAgent();
-		sharedContext = new SharedContext(userAgent);
+		sharedContext = new SharedContext(userAgent, PageBox.DEFAULT_PAGE_HEIGHT);
 
 		AWTFontResolver fontResolver = new AWTFontResolver();
 		sharedContext.setFontResolver(fontResolver);

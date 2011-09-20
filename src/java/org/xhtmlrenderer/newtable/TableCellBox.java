@@ -137,8 +137,8 @@ public class TableCellBox extends BlockBox {
         _row = row;
     }
     
-    public void layout(LayoutContext c) {
-        super.layout(c);
+    public void layout(LayoutContext c, final int pageHeight) {
+        super.layout(c, pageHeight);
     }
     
     public TableBox getTable() {

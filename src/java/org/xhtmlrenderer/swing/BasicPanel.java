@@ -83,7 +83,7 @@ public abstract class BasicPanel extends RootPanel implements FormSubmissionList
     }
 
     public BasicPanel(UserAgentCallback uac) {
-        sharedContext = new SharedContext(uac);
+        sharedContext = new SharedContext(uac, PageBox.DEFAULT_PAGE_HEIGHT);
         mouseTracker = new MouseTracker(this);
         formSubmissionListener = new FormSubmissionListener() {
             public void submit(String query) {

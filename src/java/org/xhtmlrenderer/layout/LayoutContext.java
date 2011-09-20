@@ -520,4 +520,9 @@ public class LayoutContext implements CssContext {
     public void setBreakAtLineContext(BreakAtLineContext breakAtLineContext) {
         _breakAtLineContext = breakAtLineContext;
     }
+
+    public int getPageHeight() {
+        return _sharedContext.getPageHeight();
+    }
+
 }

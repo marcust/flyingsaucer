@@ -30,6 +30,7 @@ import org.xhtmlrenderer.layout.SharedContext;
 import org.xhtmlrenderer.render.BlockBox;
 import org.xhtmlrenderer.render.Box;
 import org.xhtmlrenderer.render.RenderingContext;
+import org.xhtmlrenderer.render.PageBox;
 import org.xhtmlrenderer.render.ViewportBox;
 import org.xhtmlrenderer.simple.extend.XhtmlNamespaceHandler;
 import org.xhtmlrenderer.util.Configuration;
@@ -328,7 +329,7 @@ public class BoxRenderer {
 	}
 
     private SharedContext newSharedContext(int dotsPerPixel, UserAgentCallback userAgent) {
-        SharedContext context = new SharedContext(userAgent);
+        SharedContext context = new SharedContext(userAgent, PageBox.DEFAULT_PAGE_HEIGHT);
 
         AWTFontResolver fontResolver = new AWTFontResolver();
         context.setFontResolver(fontResolver);

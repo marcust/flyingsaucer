@@ -94,14 +94,20 @@ public class SharedContext {
 
     private ReplacedElementFactory replacedElementFactory;
     private Rectangle temp_canvas;
+    private int pageHeight;
 
     public SharedContext() {
+    }
+
+    public SharedContext(  final int pageHeight ) {
+        this.pageHeight = pageHeight;
     }
 
     /**
      * Constructor for the Context object
      */
-    public SharedContext(UserAgentCallback uac) {
+    public SharedContext(UserAgentCallback uac, final int pageHeight) {
+        this.pageHeight = pageHeight;
         font_resolver = new AWTFontResolver();
         replacedElementFactory = new SwingReplacedElementFactory();
         setMedia("screen");
@@ -592,7 +598,12 @@ public class SharedContext {
         if (this.replacedElementFactory != null) {
             this.replacedElementFactory.reset();
         }
+
         this.replacedElementFactory = ref;
+    }
+
+    public int getPageHeight() {
+        return pageHeight;
     }
 
     public void removeElementReferences(Element e) {

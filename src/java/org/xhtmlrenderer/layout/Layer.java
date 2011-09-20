@@ -784,7 +784,7 @@ public class Layer {
     }
     
     public static PageBox createPageBox(CssContext c, String pseudoPage) {
-        PageBox result = new PageBox();
+        PageBox result = new PageBox( c.getPageHeight() );
         
         String pageName = null;
         // HACK We only create pages during layout, but the OutputDevice

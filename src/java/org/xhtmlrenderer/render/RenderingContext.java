@@ -21,6 +21,7 @@ package org.xhtmlrenderer.render;
 
 import java.awt.Rectangle;
 
+import org.omg.CORBA._PolicyStub;
 import org.xhtmlrenderer.context.StyleReference;
 import org.xhtmlrenderer.css.style.CssContext;
 import org.xhtmlrenderer.css.value.FontSpecification;
@@ -230,5 +231,10 @@ public class RenderingContext implements CssContext {
     public Box getBoxById(String id) {
         return sharedContext.getBoxById(id);
     }
+
+    public int getPageHeight() {
+        return sharedContext.getPageHeight();
+    }
+
 }
 

@@ -47,6 +47,9 @@ import org.xhtmlrenderer.layout.LayoutContext;
 import org.xhtmlrenderer.newtable.TableBox;
 
 public class PageBox {
+
+    public final static int DEFAULT_PAGE_HEIGHT = -1;
+
     private static final MarginArea[] MARGIN_AREA_DEFS = new MarginArea[] {
         new TopLeftCorner(),
         new TopMarginArea(),
@@ -67,6 +70,8 @@ public class PageBox {
     private int _top;
     private int _bottom;
     
+    private final int _calculatedHeight;
+
     private int _paintingTop;
     private int _paintingBottom;
     
@@ -82,6 +87,14 @@ public class PageBox {
     
     private Element _metadata;
     
+    public PageBox() {
+        this( DEFAULT_PAGE_HEIGHT );
+    }
+
+    public PageBox( final int height ) {
+        _calculatedHeight = height;
+    }
+
     public int getWidth(CssContext cssCtx) {
         resolvePageDimensions(cssCtx);
         
@@ -108,7 +121,9 @@ public class PageBox {
                 width = resolveAutoPageWidth(cssCtx);
             }
             
-            if (style.isLength(CSSName.FS_PAGE_HEIGHT)) {
+            if ( _calculatedHeight > 0 ) {
+                height = _calculatedHeight;
+            } else if (style.isLength(CSSName.FS_PAGE_HEIGHT)) {
                 height = (int)style.getFloatPropertyProportionalTo(
                         CSSName.FS_PAGE_HEIGHT, 0, cssCtx);
             } else {
@@ -339,7 +354,7 @@ public class PageBox {
     
     public int getMarginBorderPadding(CssContext cssCtx, int which) {
         return getStyle().getMarginBorderPadding(
-                cssCtx, (int)getOuterPageWidth(), which);
+                cssCtx, getOuterPageWidth(), which);
     }
 
     public PageInfo getPageInfo() {
