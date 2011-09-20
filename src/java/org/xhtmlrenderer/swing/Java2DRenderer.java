@@ -164,6 +164,34 @@ public class Java2DRenderer {
         this.height = height;
     }
 
+    
+    
+    /**
+     * Creates a new instance pointing to the given Document. Does not render until {@link #getImage(int)} is called for
+     * the first time.
+     *
+     * @param doc The document to be rendered.
+     * @param baseurl The base url for the document, against which  relative paths are resolved.
+     * @param width Target width, in pixels, for the image; required to provide horizontal bounds for the layout.
+     * @param height Target height, in pixels, for the image.
+     */
+    public Java2DRenderer(Document doc, final String baseurl, int width, int height) {
+        this( doc, width, height );
+        this.sourceDocumentBase = baseurl;
+    }
+    
+    /**
+     * Creates a new instance pointing to the given Document. Does not render until {@link #getImage(int)} is called for
+     * the first time.
+     *
+     * @param doc The document to be rendered.
+     * @param baseurl The base url for the document, against which  relative paths are resolved.
+     * @param width Target width, in pixels, for the image; required to provide horizontal bounds for the layout.
+     */
+    public Java2DRenderer(Document doc, final String baseurl, int width ) {
+        this( doc, width, NO_HEIGHT );
+        this.sourceDocumentBase = baseurl;
+    }
 	/**
 	 * Creates a new instance for a given File. Does not render until {@link #getImage(int)} is called for
 	 * the first time.
@@ -266,6 +294,9 @@ public class Java2DRenderer {
 			layout(this.width);
 
 			height = this.height == -1 ? root.getHeight() : this.height;
+			if ( height <= 0 ) {
+				height = 1;
+			}
 			outputImage = createBufferedImage(this.width, height);
 			outputDevice = new Java2DOutputDevice(outputImage);
 			Graphics2D newG = (Graphics2D) outputImage.getGraphics();
