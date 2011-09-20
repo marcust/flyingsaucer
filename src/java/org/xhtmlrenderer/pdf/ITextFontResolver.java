@@ -33,6 +33,8 @@ import org.xhtmlrenderer.render.FSFont;
 import org.xhtmlrenderer.util.XRLog;
 import org.xhtmlrenderer.util.XRRuntimeException;
 
+import java.lang.reflect.Field;
+
 import java.io.*;
 import java.util.*;
 
@@ -168,6 +170,48 @@ public class ITextFontResolver implements FontResolver {
         }
     }
 
+     private Object getField( final BaseFont font, final String fieldName ) 
+     throws SecurityException, NoSuchFieldException, IllegalArgumentException, IllegalAccessException {
+         Class current = font.getClass();
+         while (current != null) {
+             if (current.getName().endsWith(".Type1Font")) {
+                 Field f = current.getDeclaredField( fieldName );
+                 f.setAccessible(true);
+                 return f.get(font);
+             }
+             current = current.getSuperclass();
+         }
+
+         throw new NoSuchFieldException("Could not find tables field" );
+     }
+
+     private void populateDescription( final BaseFont font, final FontDescription descr ) {
+         try {
+             final Float italicAngle = (Float) getField( font, "ItalicAngle" );
+             if ( italicAngle != null && italicAngle.floatValue() < 0.0f ) {
+                 descr.setStyle( IdentValue.ITALIC );
+             } else {
+                 descr.setStyle( IdentValue.NORMAL );
+             }
+             final String weight = (String) getField( font, "Weight" );
+             if ( weight != null && weight.toLowerCase().contains( "bold" ) ) {
+                 descr.setWeight( 700 );
+             } else {
+                 descr.setWeight( 400 );
+             }
+             final Integer underlinePosition = (Integer) getField( font, "UnderlinePosition" );
+             if ( underlinePosition != null ) {
+                 descr.setUnderlinePosition( underlinePosition.floatValue() );
+             }
+             final Integer underlineThickness = (Integer) getField( font, "UnderlineThickness" );
+             if ( underlineThickness != null ) {
+                 descr.setUnderlineThickness( underlineThickness.floatValue() );
+             }
+         } catch ( Exception e ) {
+             throw new XRRuntimeException(e.getMessage(), e);
+         }
+    }
+
     public void addFont(String path, boolean embedded)
             throws DocumentException, IOException {
         addFont(path, BaseFont.CP1252, embedded);
@@ -233,6 +277,7 @@ public class ITextFontResolver implements FontResolver {
             FontFamily fontFamily = getFontFamily(fontFamilyName);
 
             FontDescription descr = new FontDescription(font);
+            populateDescription(font, descr);
             // XXX Need to set weight, underline position, etc.  This information
             // is contained in the AFM file (and even parsed by Type1Font), but
             // unfortunately it isn't exposed to the caller.
@@ -284,6 +329,7 @@ public class ITextFontResolver implements FontResolver {
 
             FontDescription descr = new FontDescription(font);
             descr.setFromFontFace(true);
+            populateDescription(font, descr);
             // XXX Need to set weight, underline position, etc.  This information
             // is contained in the AFM file (and even parsed by Type1Font), but
             // unfortunately it isn't exposed to the caller.
