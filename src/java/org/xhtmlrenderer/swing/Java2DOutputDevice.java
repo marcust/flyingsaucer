@@ -34,6 +34,7 @@ import java.awt.image.BufferedImage;
 import javax.swing.*;
 
 import org.xhtmlrenderer.css.parser.FSColor;
+import org.xhtmlrenderer.css.parser.FSCMYKColor;
 import org.xhtmlrenderer.css.parser.FSRGBColor;
 import org.xhtmlrenderer.extend.FSGlyphVector;
 import org.xhtmlrenderer.extend.FSImage;
@@ -48,7 +49,10 @@ import org.xhtmlrenderer.render.InlineText;
 import org.xhtmlrenderer.render.JustificationInfo;
 import org.xhtmlrenderer.render.RenderingContext;
 
+import com.lowagie.text.pdf.CMYKColor;
+
 public class Java2DOutputDevice extends AbstractOutputDevice implements OutputDevice {
+
     private Graphics2D _graphics;
 
     public Java2DOutputDevice(Graphics2D graphics) {
@@ -197,7 +201,9 @@ public class Java2DOutputDevice extends AbstractOutputDevice implements OutputDe
         if (color instanceof FSRGBColor) {
             FSRGBColor rgb = (FSRGBColor)color;
             _graphics.setColor(new Color(rgb.getRed(), rgb.getGreen(), rgb.getBlue()));
-        } else {
+        } else if ( color instanceof FSCMYKColor ) {
+            FSCMYKColor cmyk = (FSCMYKColor)color;
+            _graphics.setColor( new CMYKColor( cmyk.getCyan(), cmyk.getMagenta(), cmyk.getYellow(), cmyk.getBlack() ) );
             throw new RuntimeException("internal error: unsupported color class " + color.getClass().getName());
         }
     }
